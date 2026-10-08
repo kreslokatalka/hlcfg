@@ -1,0 +1,10 @@
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    drun-display-format: "{name}";
+    font: "Noto Sans 11";
+    display-drun: "Apps";
+    display-run: "Run";
+    display-window: "Windows";
+}
+@theme "themes/light.rasi"

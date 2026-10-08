@@ -1,0 +1,31 @@
+* {
+    background:     #17241e;
+    background-alt: #20372b;
+    foreground:     #e4eee7;
+    muted:          #a9b9ad;
+    pink:           #a9dfb9;
+    blue:           #75c99a;
+    blue-soft:      #315f49;
+    urgent:         #ef9c97;
+    background-color: transparent;
+    text-color: var(foreground);
+    margin: 0; padding: 0; spacing: 0;
+}
+window { width: 38%; padding: 18px; border: 1px; border-color: #75c99a; border-radius: 16px; background-color: var(background); }
+mainbox { spacing: 12px; background-color: transparent; children: [ inputbar, message, listview ]; }
+inputbar { padding: 10px 12px; spacing: 10px; border: 0px 0px 1px 0px; border-color: #354c3f; background-color: transparent; children: [ prompt, entry ]; }
+prompt { text-color: var(blue); }
+entry { placeholder: "Search applications…"; placeholder-color: var(muted); text-color: var(foreground); cursor: text; }
+listview { lines: 8; columns: 1; fixed-height: true; spacing: 5px; scrollbar: false; background-color: transparent; }
+element { padding: 9px 11px; spacing: 10px; border-radius: 10px; background-color: transparent; text-color: var(foreground); cursor: pointer; }
+element normal.normal, element alternate.normal { background-color: transparent; text-color: var(foreground); }
+element alternate.normal { background-color: var(background-alt); }
+element selected.normal { background-color: var(blue-soft); text-color: var(foreground); }
+element normal.active, element alternate.active { text-color: var(blue); }
+element selected.active { background-color: var(blue); text-color: #102018; }
+element normal.urgent, element alternate.urgent { text-color: var(urgent); }
+element selected.urgent { background-color: var(urgent); text-color: #17241e; }
+element-icon { size: 1.25em; background-color: transparent; }
+element-text { background-color: transparent; text-color: inherit; vertical-align: 0.5; }
+message { padding: 8px 10px; border-radius: 8px; background-color: var(background-alt); text-color: var(pink); }
+textbox { text-color: var(muted); background-color: transparent; }

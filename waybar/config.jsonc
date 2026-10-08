@@ -1,0 +1,77 @@
+{
+    "layer": "top",
+    "margin-top": 4,
+    "margin-left": 6,
+    "margin-right": 6,
+    "modules-left": [
+        "tray"
+    ],
+    "modules-center": [
+        "custom/weather",
+        "hyprland/workspaces",
+        "clock",
+        "clock#right"
+    ],
+    "modules-right": [
+        "custom/theme",
+        "custom/volume",
+        "custom/brightness"
+    ],
+    "sway/window": {
+        "max-length": 50
+    },
+    "clock": {
+        "locale": "en_US.UTF-8",
+        "format": "{:%H:%M}",
+        "format-alt": "{:%a, %d. %b  %H:%M}",
+        "tooltip-format": "{:%A, %d %B %Y}"
+    },
+    "clock#right": {
+        "locale": "en_US.UTF-8",
+        "format": "{:%a %d %b}",
+        "tooltip": false
+    },
+    "custom/weather": {
+        "exec": "/home/kreslo/.config/waybar/scripts/weather.sh",
+        "return-type": "json",
+        "interval": 1800,
+        "tooltip": true,
+        "on-click": "xdg-open https://open-meteo.com/"
+    },
+    "custom/volume": {
+        "exec": "/home/kreslo/.config/waybar/scripts/volume.sh",
+        "return-type": "json",
+        "interval": 2,
+        "signal": 8,
+        "on-click": "/home/kreslo/.config/waybar/scripts/control-popover.sh volume",
+        "on-click-middle": "/home/kreslo/.config/waybar/scripts/control-popover.sh volume",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "tooltip": true
+    },
+    "custom/theme": {
+        "exec": "/home/kreslo/.config/themes/theme-status.sh",
+        "return-type": "json",
+        "interval": 30,
+        "on-click": "/home/kreslo/.config/themes/open-gallery.sh",
+        "tooltip": true
+    },
+    "custom/brightness": {
+        "exec": "/home/kreslo/.config/waybar/scripts/brightness.sh",
+        "return-type": "json",
+        "interval": 5,
+        "signal": 9,
+        "on-click": "/home/kreslo/.config/waybar/scripts/control-popover.sh brightness",
+        "on-click-middle": "/home/kreslo/.config/waybar/scripts/control-popover.sh brightness",
+        "tooltip": true
+    },
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    },
+    "hyprland/workspaces": {
+        "format": "{id}",
+        "sort-by-number": true,
+        "show-special": false,
+        "on-click": "activate"
+    }
+}

@@ -1,0 +1,24 @@
+# Runtime/build artifacts
+themes/theme-gallery
+waybar/scripts/control-popover
+*.o
+*.so
+*.log
+*.tmp
+*.swp
+*~
+
+# Theme switcher runtime state and staging files
+themes/.theme-gallery.*.new
+themes/.apply.*
+waybar/*.theme-new
+kitty/*.theme-new
+gtk-3.0/*.theme-new
+gtk-4.0/*.theme-new
+rofi/*.theme-new
+
+# Keep backups, caches, histories, and application profiles out of this repo.
+theme-backups/
+**/Cache/
+**/Cache2/
+**/cache/

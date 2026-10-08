@@ -1,0 +1,127 @@
+* {
+    background:     #fff5f7;
+    background-alt: #ffffff;
+    foreground:     #263041;
+    muted:          #697487;
+    pink:           #a84968;
+    blue:           #267b9f;
+    blue-soft:      #bdeeff;
+    urgent:         #a83d58;
+
+    background-color: transparent;
+    text-color: var(foreground);
+    margin: 0;
+    padding: 0;
+    spacing: 0;
+}
+
+window {
+    width: 38%;
+    padding: 18px;
+    border: 1px;
+    border-color: #f7a8b8;
+    border-radius: 16px;
+    background-color: var(background);
+}
+
+mainbox {
+    spacing: 12px;
+    background-color: transparent;
+    children: [ inputbar, message, listview ];
+}
+
+inputbar {
+    padding: 10px 12px;
+    spacing: 10px;
+    border: 0px 0px 1px 0px;
+    border-color: #f1d8df;
+    background-color: transparent;
+    children: [ prompt, entry ];
+}
+
+prompt {
+    text-color: var(blue);
+}
+
+entry {
+    placeholder: "Search applications…";
+    placeholder-color: var(muted);
+    text-color: var(foreground);
+    cursor: text;
+}
+
+listview {
+    lines: 8;
+    columns: 1;
+    fixed-height: true;
+    spacing: 5px;
+    scrollbar: false;
+    background-color: transparent;
+}
+
+element {
+    padding: 9px 11px;
+    spacing: 10px;
+    border-radius: 10px;
+    background-color: transparent;
+    text-color: var(foreground);
+    cursor: pointer;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color: var(foreground);
+}
+
+element alternate.normal {
+    background-color: var(background-alt);
+    text-color: var(foreground);
+}
+
+element selected.normal {
+    background-color: var(blue-soft);
+    text-color: var(foreground);
+}
+
+element normal.active,
+element alternate.active {
+    text-color: var(blue);
+}
+
+element selected.active {
+    background-color: #55cdfc;
+    text-color: #171923;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    text-color: var(urgent);
+}
+
+element selected.urgent {
+    background-color: var(urgent);
+    text-color: #ffffff;
+}
+
+element-icon {
+    size: 1.25em;
+    background-color: transparent;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    vertical-align: 0.5;
+}
+
+message {
+    padding: 8px 10px;
+    border-radius: 8px;
+    background-color: var(background-alt);
+    text-color: var(pink);
+}
+
+textbox {
+    text-color: var(muted);
+    background-color: transparent;
+}
