@@ -24,13 +24,13 @@ files it replaces under `${XDG_STATE_HOME:-~/.local/state}/hlcfg/backups/`.
 Review the installer before running it, then use:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/kreslokatalka/hlcfg/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kreslokatalka/hlcfg/refs/heads/main/install.sh | bash
 ```
 
 For a non-interactive install, add `--yes`:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/kreslokatalka/hlcfg/main/install.sh | bash -s -- --yes
+curl -fsSL https://raw.githubusercontent.com/kreslokatalka/hlcfg/refs/heads/main/install.sh | bash -s -- --yes
 ```
 
 Pass `--no-packages` if dependencies are already installed. The installer

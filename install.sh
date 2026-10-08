@@ -24,7 +24,7 @@ Options:
   -h, --help        Show this help.
 
 One-line installation:
-  curl -fsSL https://raw.githubusercontent.com/kreslokatalka/hlcfg/main/install.sh | bash -s -- --yes
+  curl -fsSL https://raw.githubusercontent.com/kreslokatalka/hlcfg/refs/heads/main/install.sh | bash -s -- --yes
 EOF
 }
 
