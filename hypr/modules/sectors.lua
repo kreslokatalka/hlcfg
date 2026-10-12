@@ -32,6 +32,15 @@ hl.window_rule({
     no_focus = true,
 })
 
+-- Keep the theme picker as the keyboard target while the pointer moves over
+-- other windows, like a launcher/menu with persistent focus.
+hl.window_rule({
+    name  = "theme-gallery-stay-focused",
+    match = { class = "^org[.]hyprland[.]theme-gallery$" },
+
+    stay_focused = true,
+})
+
 -- Layer rules also return a handle.
 -- local overlayLayerRule = hl.layer_rule({
 --     name  = "no-anim-overlay",
@@ -64,6 +73,47 @@ for _, workspace in ipairs({ "2", "3", "4", "5", "6", "8", "9" }) do
         monitor   = "DP-1",
     })
 end
+
+-- Close a Waybar control popover on clicks outside its layer surface without
+-- focusing the window underneath. The per-bind non-consuming option by itself
+-- does not pass mouse input, so the popover temporarily enables Hyprland's
+-- pass_mouse_when_bound setting while it is open.
+local function dismissControlPopoverOutsideClick()
+    local layers = hl.get_layers({ namespace = "waybar-control-popover" })
+    if #layers == 0 then
+        return
+    end
+
+    local cursor = hl.get_cursor_pos()
+    if not cursor then
+        return
+    end
+
+    for _, layer in ipairs(layers) do
+        if cursor.x >= layer.x and cursor.x < layer.x + layer.w
+            and cursor.y >= layer.y and cursor.y < layer.y + layer.h then
+            return
+        end
+    end
+
+    hl.exec_cmd("pkill -TERM -x control-popover")
+end
+
+for _, button in ipairs({ 272, 273, 274 }) do
+    hl.bind("mouse:" .. button, dismissControlPopoverOutsideClick, {
+        mouse = true,
+        click = true,
+        non_consuming = true,
+        desc = "Close Waybar control popover outside click",
+    })
+end
+
+hl.bind("mouse:275", dismissControlPopoverOutsideClick, {
+    mouse = true,
+    click = true,
+    non_consuming = true,
+    desc = "Close Waybar control popover outside click",
+})
 
 -- Place each application on its assigned workspace.
 local app_workspaces = {

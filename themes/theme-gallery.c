@@ -16,7 +16,7 @@ static const Theme themes[] = {
     {
         "light", "Rosewater", "Светлая · мягкий день", "ВОЗДУШНАЯ · ПАСТЕЛЬНАЯ",
         {"#FFF5F7", "#F7A8B8", "#F5C2D1", "#55CDFC", "#263041"},
-        {"#F5F7FB", "#FFFFFF", "#F7A8B8", "#BDEEFF", "#263041", "#267B9F"}
+        {"#FFF5F7", "#FFFFFF", "#F5C2D1", "#BDEEFF", "#263041", "#267B9F"}
     },
     {
         "dark", "Тихий лес", "Тёмная · глубокий зелёный", "СОСРЕДОТОЧЕННАЯ · ЛЕСНАЯ",
@@ -35,6 +35,16 @@ typedef struct {
     int current;
     gboolean applying;
 } Gallery;
+
+static Gallery *active_gallery;
+
+static void gallery_destroyed(GtkWidget *widget, gpointer user_data) {
+    (void)widget;
+    Gallery *gallery = user_data;
+    if (active_gallery == gallery)
+        active_gallery = NULL;
+    g_free(gallery);
+}
 
 static void rounded_rect(cairo_t *cr, double x, double y, double w, double h,
                          double radius, const char *color) {
@@ -140,6 +150,7 @@ static GtkWidget *build_card(Gallery *gallery, int index) {
     const Theme *theme = &themes[index];
     GtkWidget *button = gtk_button_new();
     gtk_widget_add_css_class(button, "theme-card");
+    gtk_widget_add_css_class(button, index == 1 ? "dark-theme-card" : "light-theme-card");
     gtk_widget_set_hexpand(button, TRUE);
     gtk_widget_set_valign(button, GTK_ALIGN_FILL);
     gtk_widget_set_size_request(button, 340, 362);
@@ -275,7 +286,9 @@ static gboolean on_key_pressed(GtkEventControllerKey *controller, guint keyval,
         gtk_window_close(gallery->window);
         return TRUE;
     }
-    if (keyval == GDK_KEY_Left || keyval == GDK_KEY_Right) {
+    if (keyval == GDK_KEY_Left || keyval == GDK_KEY_Right ||
+        keyval == GDK_KEY_a || keyval == GDK_KEY_A ||
+        keyval == GDK_KEY_d || keyval == GDK_KEY_D) {
         gallery->selected = 1 - gallery->selected;
         update_cards(gallery);
         gtk_widget_grab_focus(gallery->cards[gallery->selected]);
@@ -291,7 +304,16 @@ static gboolean on_key_pressed(GtkEventControllerKey *controller, guint keyval,
 
 static void activate(GtkApplication *application, gpointer user_data) {
     (void)user_data;
+    if (active_gallery) {
+        if (active_gallery->applying)
+            gtk_window_present(active_gallery->window);
+        else
+            gtk_window_close(active_gallery->window);
+        return;
+    }
+
     Gallery *gallery = g_new0(Gallery, 1);
+    active_gallery = gallery;
     gallery->current = 0;
     const char *state_home = g_get_user_state_dir();
     char *state_path = g_build_filename(state_home, "hyprland-theme-gallery", "current", NULL);
@@ -310,26 +332,29 @@ static void activate(GtkApplication *application, gpointer user_data) {
         ".gallery-shell { padding: 30px 34px 24px; }"
         ".eyebrow { color: #64836d; font-size: 10px; font-weight: 700; letter-spacing: 1.6px; }"
         ".dark-window .eyebrow { color: #8fbea0; }"
+        ".light-theme-card .eyebrow { color: #267b9f; }"
+        ".dark-theme-card .eyebrow { color: #8fbea0; }"
         ".gallery-title { color: #202721; font-size: 29px; font-weight: 700; }"
         ".dark-window .gallery-title { color: #e7f0e9; }"
         ".gallery-subtitle { color: #707a73; font-size: 13px; }"
         ".dark-window .gallery-subtitle { color: #a9b9ad; }"
         ".theme-card { padding: 0; border: 1px solid #e2e5df; border-radius: 19px; background: #fffefa; color: #263041; box-shadow: 0 5px 18px alpha(#324838, 0.07); transition: border-color 160ms ease, box-shadow 160ms ease; }"
         ".theme-card:hover { border-color: #9ab9a1; box-shadow: 0 8px 24px alpha(#324838, 0.13); }"
-        ".theme-card.selected { border: 2px solid #538b67; box-shadow: 0 0 0 3px alpha(#75c99a, 0.18); }"
-        ".dark-window .theme-card { border-color: #2b3d32; background: #17241e; color: #e4eee7; box-shadow: 0 6px 20px alpha(#000000, 0.22); }"
-        ".dark-window .theme-card:hover { border-color: #648c71; }"
-        ".dark-window .theme-card.selected { border: 2px solid #75c99a; box-shadow: 0 0 0 3px alpha(#75c99a, 0.15); }"
+        ".theme-card.selected { border: 2px solid #55CDFC; box-shadow: 0 0 0 3px alpha(#55CDFC, 0.18); }"
+        ".dark-theme-card { border-color: #2b3d32; background: #17241e; color: #e4eee7; box-shadow: 0 6px 20px alpha(#000000, 0.22); }"
+        ".dark-theme-card:hover { border-color: #648c71; }"
+        ".dark-theme-card.selected { border: 2px solid #75c99a; box-shadow: 0 0 0 3px alpha(#75c99a, 0.15); }"
+        ".light-theme-card { border-color: #f1dce3; background: #fffefa; color: #263041; }"
         ".preview-box { padding: 10px 10px 0; }"
         ".card-body { padding: 17px 20px 18px; }"
         ".card-title { color: #26352b; font-size: 21px; font-weight: 700; }"
-        ".dark-window .card-title { color: #e4eee7; }"
+        ".dark-theme-card .card-title { color: #e4eee7; }"
         ".card-description { color: #788078; font-size: 12px; }"
-        ".dark-window .card-description { color: #a9b9ad; }"
+        ".dark-theme-card .card-description { color: #a9b9ad; }"
         ".current-badge { padding: 5px 8px; border-radius: 99px; background: #e7f4e9; color: #356d4d; font-size: 9px; font-weight: 700; letter-spacing: 0.6px; }"
-        ".dark-window .current-badge { background: #294a38; color: #b0e3bf; }"
+        ".dark-theme-card .current-badge { background: #294a38; color: #b0e3bf; }"
         ".selection-hint { color: #738078; font-size: 11px; }"
-        ".dark-window .selection-hint { color: #a9b9ad; }"
+        ".dark-theme-card .selection-hint { color: #a9b9ad; }"
         ".apply-button { min-height: 42px; padding: 0 20px; border-radius: 12px; background: #356d4d; color: white; font-weight: 700; }"
         ".apply-button:hover { background: #285a3e; }"
         ".apply-button:disabled { background: #e7ebe6; color: #8b948d; }"
@@ -395,7 +420,7 @@ static void activate(GtkApplication *application, gpointer user_data) {
     GtkWidget *footer = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 14);
     gtk_widget_set_margin_top(footer, 17);
     gtk_widget_set_valign(footer, GTK_ALIGN_CENTER);
-    GtkWidget *hint = gtk_label_new("← →  выбрать     ·     Esc  закрыть без изменений");
+    GtkWidget *hint = gtk_label_new("A / D или ← / →  выбрать     ·     Esc  закрыть без изменений");
     gtk_widget_add_css_class(hint, "footer-hint");
     gtk_widget_set_halign(hint, GTK_ALIGN_START);
     gtk_widget_set_hexpand(hint, TRUE);
@@ -410,7 +435,9 @@ static void activate(GtkApplication *application, gpointer user_data) {
     gtk_event_controller_set_propagation_phase(keys, GTK_PHASE_CAPTURE);
     g_signal_connect(keys, "key-pressed", G_CALLBACK(on_key_pressed), gallery);
     gtk_widget_add_controller(GTK_WIDGET(gallery->window), keys);
+    g_signal_connect(gallery->window, "destroy", G_CALLBACK(gallery_destroyed), gallery);
     update_cards(gallery);
+    gtk_window_set_focus(gallery->window, gallery->cards[gallery->selected]);
     gtk_window_present(gallery->window);
 }
 

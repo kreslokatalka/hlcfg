@@ -7,6 +7,10 @@ pid_file="/tmp/waybar-control-popover-${kind}.pid"
 # Toggle: a second click on the same tray icon closes the open slider.
 if [[ -f "$pid_file" ]]; then
     pkill -x control-popover 2>/dev/null || true
+    for _ in {1..50}; do
+        pgrep -x control-popover >/dev/null 2>&1 || break
+        sleep 0.05
+    done
     rm -f "$pid_file"
     exit 0
 fi
@@ -77,6 +81,18 @@ if [[ ! -x "$binary" || "$source_file" -nt "$binary" ]]; then
     cc -O2 -Wall -Wextra "$source_file" -o "$binary" $(pkg-config --cflags --libs gtk+-3.0 gtk-layer-shell-0)
 fi
 
+# Close any existing popover first; it restores the saved Hyprland setting.
 pkill -x control-popover 2>/dev/null || true
+for _ in {1..50}; do
+    pgrep -x control-popover >/dev/null 2>&1 || break
+    sleep 0.05
+done
+if pgrep -x control-popover >/dev/null 2>&1; then
+    echo "Existing control popover did not exit; refusing to alter focus mode." >&2
+    exit 1
+fi
 rm -f /tmp/waybar-control-popover-*.pid
-nohup "$binary" "$kind" "$button_x" "$anchor_y" "$initial" >/dev/null 2>&1 </dev/null &
+follow_mouse=$(hyprctl getoption input:follow_mouse -j | python3 -c 'import json,sys; print(int(json.load(sys.stdin)["int"]))')
+mouse_refocus=$(hyprctl getoption input:mouse_refocus -j | python3 -c 'import json,sys; print(str(json.load(sys.stdin)["bool"]).lower())')
+pass_mouse=$(hyprctl getoption binds:pass_mouse_when_bound -j | python3 -c 'import json,sys; print(str(json.load(sys.stdin)["bool"]).lower())')
+nohup "$binary" "$kind" "$button_x" "$anchor_y" "$initial" "$follow_mouse" "$mouse_refocus" "$pass_mouse" >/dev/null 2>&1 </dev/null &

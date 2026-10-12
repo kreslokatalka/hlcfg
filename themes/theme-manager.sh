@@ -31,6 +31,13 @@ fi
 
 case "$THEME" in light|dark) ;; *) echo "Unknown theme: $THEME (expected light or dark)" >&2; exit 2 ;; esac
 DIR="$THEMES/$THEME"
+if [[ "$THEME" == dark ]]; then
+    HYFETCH_PRESET='#0B3D2E,#176B45,#2E8B57,#5AAE68,#8BCF7A,#C4E89A'
+else
+    HYFETCH_PRESET='transgender'
+fi
+HYFETCH_CONFIG="$ROOT/hyfetch.json"
+[[ -r "$HYFETCH_CONFIG" ]] || { echo "Missing HyFetch config: $HYFETCH_CONFIG" >&2; exit 1; }
 for file in waybar.css kitty.conf gtk-3.0-settings.ini gtk-3.0.css gtk-4.0-settings.ini gtk-4.0.css; do
     [[ -r "$DIR/$file" ]] || { echo "Missing theme asset: $DIR/$file" >&2; exit 1; }
 done
@@ -51,6 +58,9 @@ cp "$DIR/gtk-4.0-settings.ini" "$TEMP_DIR/gtk-4.0-settings.ini"
 cp "$DIR/gtk-4.0.css" "$TEMP_DIR/gtk-4.0.css"
 printf '%s\n' "$THEME" > "$TEMP_DIR/current"
 printf '\n# Theme gallery palette (managed by ~/.config/themes/theme-manager.sh)\ninclude /home/kreslo/.config/kitty/theme.conf\n' > "$TEMP_DIR/kitty-include.conf"
+sed -E "s/^([[:space:]]*\"preset\":[[:space:]]*)\"[^\"]*\"(,?[[:space:]]*)$/\1\"$HYFETCH_PRESET\"\2/" \
+    "$HYFETCH_CONFIG" > "$TEMP_DIR/hyfetch.json"
+grep -q '"preset":' "$TEMP_DIR/hyfetch.json" || { echo "Could not update HyFetch preset" >&2; exit 1; }
 
 # Stage all assets before touching live configuration files.
 install -m 0644 "$TEMP_DIR/waybar.css" "$ROOT/waybar/.style.css.theme-new"
@@ -60,6 +70,7 @@ install -m 0644 "$TEMP_DIR/gtk-3.0.css" "$ROOT/gtk-3.0/.gtk.css.theme-new"
 install -m 0644 "$TEMP_DIR/gtk-4.0-settings.ini" "$ROOT/gtk-4.0/.settings.ini.theme-new"
 install -m 0644 "$TEMP_DIR/gtk-4.0.css" "$ROOT/gtk-4.0/.gtk.css.theme-new"
 install -m 0644 "$TEMP_DIR/kitty-include.conf" "$ROOT/kitty/.kitty-theme-include.conf.theme-new"
+install -m 0644 "$TEMP_DIR/hyfetch.json" "$ROOT/.hyfetch.json.theme-new"
 
 mv "$ROOT/waybar/.style.css.theme-new" "$ROOT/waybar/style.css"
 mv "$ROOT/kitty/.theme.conf.theme-new" "$ROOT/kitty/theme.conf"
@@ -68,6 +79,7 @@ mv "$ROOT/gtk-3.0/.gtk.css.theme-new" "$ROOT/gtk-3.0/gtk.css"
 mv "$ROOT/gtk-4.0/.settings.ini.theme-new" "$ROOT/gtk-4.0/settings.ini"
 mv "$ROOT/gtk-4.0/.gtk.css.theme-new" "$ROOT/gtk-4.0/gtk.css"
 mv "$ROOT/kitty/.kitty-theme-include.conf.theme-new" "$ROOT/kitty/theme-gallery-include.conf"
+mv "$ROOT/.hyfetch.json.theme-new" "$HYFETCH_CONFIG"
 mv "$TEMP_DIR/current" "$STATE_FILE"
 
 # Use per-user GTK preferences and files; do not override the environment of every app.

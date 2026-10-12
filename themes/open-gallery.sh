@@ -12,4 +12,10 @@ if [[ ! -x "$BINARY" || "$SOURCE" -nt "$BINARY" ]]; then
     mv "$TEMP_BINARY" "$BINARY"
     trap - EXIT
 fi
+# If this GTK application is already running, let its own activate handler
+# toggle the existing window; it already owns the saved focus setting.
+if pgrep -x theme-gallery >/dev/null 2>&1; then
+    exec "$BINARY"
+fi
+
 exec "$BINARY"
