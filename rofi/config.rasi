@@ -7,4 +7,4 @@ configuration {
     display-run: "Run";
     display-window: "Windows";
 }
-@theme "themes/dark.rasi"
+@theme "themes/light.rasi"

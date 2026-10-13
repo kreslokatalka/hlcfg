@@ -14,12 +14,12 @@ typedef struct {
 
 static const Theme themes[] = {
     {
-        "light", "Rosewater", "Светлая · мягкий день", "ВОЗДУШНАЯ · ПАСТЕЛЬНАЯ",
+        "light", "Light", "Светлая · Глаза бобо", "Никаких намеков на транс тематику",
         {"#FFF5F7", "#F7A8B8", "#F5C2D1", "#55CDFC", "#263041"},
         {"#FFF5F7", "#FFFFFF", "#F5C2D1", "#BDEEFF", "#263041", "#267B9F"}
     },
     {
-        "dark", "Тихий лес", "Тёмная · глубокий зелёный", "СОСРЕДОТОЧЕННАЯ · ЛЕСНАЯ",
+        "dark", "Dark", "Тёмная · Все равно хуйня", "Сделано по приколу ибо хули если да",
         {"#101A16", "#17241E", "#294A38", "#75C99A", "#E4EEE7"},
         {"#101A16", "#17241E", "#20372B", "#315F49", "#E4EEE7", "#75C99A"}
     }
@@ -383,7 +383,7 @@ static void activate(GtkApplication *application, gpointer user_data) {
     gtk_widget_add_css_class(shell, "gallery-shell");
     gtk_window_set_child(gallery->window, shell);
 
-    GtkWidget *eyebrow = gtk_label_new("НАСТРОЕНИЕ РАБОЧЕГО СТОЛА");
+    GtkWidget *eyebrow = gtk_label_new("НИЧЕГО НЕ ЗНАЧАЩАЯ ФРАЗА");
     gtk_widget_add_css_class(eyebrow, "eyebrow");
     gtk_widget_set_halign(eyebrow, GTK_ALIGN_START);
     gtk_box_append(GTK_BOX(shell), eyebrow);
@@ -401,7 +401,7 @@ static void activate(GtkApplication *application, gpointer user_data) {
     gtk_box_append(GTK_BOX(heading), gallery->current_label);
     gtk_box_append(GTK_BOX(shell), heading);
 
-    GtkWidget *subtitle = gtk_label_new("Цвета, свет и детали — собраны в цельный образ для всей системы.");
+    GtkWidget *subtitle = gtk_label_new("Можно что-то поменять, но все равно конфиги говно");
     gtk_widget_add_css_class(subtitle, "gallery-subtitle");
     gtk_widget_set_halign(subtitle, GTK_ALIGN_START);
     gtk_widget_set_margin_top(subtitle, 5);

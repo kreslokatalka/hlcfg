@@ -142,10 +142,12 @@ FILES=(
     fontconfig/fonts.conf
     gtk-3.0/gtk.css gtk-3.0/settings.ini
     gtk-4.0/gtk.css gtk-4.0/settings.ini
+    hyfetch.json
     hypr/hyprland.lua hypr/hyprlock.conf
     hypr/modules/autostart.lua hypr/modules/decorations.lua hypr/modules/environment.lua
     hypr/modules/keybinds.lua hypr/modules/monitors.lua hypr/modules/sectors.lua
-    hypr/scripts/audio-volume.sh
+    hypr/scripts/audio-volume.sh hypr/scripts/obsidian-start.sh
+    hypr/scripts/start-tg-ws-proxy.sh
     kitty/kitty.conf kitty/theme.conf kitty/theme-gallery-include.conf
     rofi/config.rasi rofi/themes/dark.rasi rofi/themes/light.rasi
     themes/open-gallery.sh themes/start-waybar.sh themes/theme-gallery.c

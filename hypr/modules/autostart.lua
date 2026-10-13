@@ -14,9 +14,10 @@ hl.on("hyprland.start", function ()
   hl.exec_cmd("swaync")
 
   -- Launch apps; window rules place them on their assigned workspaces.
+  hl.exec_cmd("/home/kreslo/.config/hypr/scripts/start-tg-ws-proxy.sh")
   hl.exec_cmd("firefox")
   hl.exec_cmd("codium")
-  hl.exec_cmd("obsidian")
+  hl.exec_cmd("/home/kreslo/.config/hypr/scripts/obsidian-start.sh")
   hl.exec_cmd("Telegram")
   hl.exec_cmd("happ")
 

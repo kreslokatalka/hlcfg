@@ -119,6 +119,7 @@ hl.bind("mouse:275", dismissControlPopoverOutsideClick, {
 local app_workspaces = {
     { name = "firefox",   class = "^firefox$",              workspace = "1"  },
     { name = "codium",    class = "^codium$",               workspace = "2"  },
+    { name = "code",    class = "^code-oss$",                    workspace = "2"  },
     { name = "obsidian",  class = "^md[.]obsidian[.]Obsidian$", workspace = "3"  },
     { name = "telegram",  class = "^org[.]telegram[.]desktop$", workspace = "4"  },
     { name = "happ",      class = "^Happ$",                 workspace = "10" },

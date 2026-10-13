@@ -1,4 +1,5 @@
 # Runtime/build artifacts
+tg-ws-proxy.env
 themes/theme-gallery
 waybar/scripts/control-popover
 *.o
